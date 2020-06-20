@@ -1,8 +1,8 @@
 Autor: Domenje Carlos R. - 2020
 
-# Título del Proyecto
+# Smart Home
 
-Proyecto Final Diseño Aplicaciones Web - Smart Home
+Proyecto Final Diseño Aplicaciones Web
 
 ## Introduccion 🚀
 
@@ -92,7 +92,7 @@ Este proyecto está bajo la Licencia GPL.
 ## Gratitud 🎁
 
 * Con este proyecto pude comprender la utilizacion de docker y ademas los criterios de consultas a base de datos y utilizacion de expressJS ademas de implementar todo lo visto a traves de las clases.📢
-* Agradezco a todos los profesores de la catedra Diseño de Aplicacion Web de FIUBA🤓.
+* Agradezco a todos los profesores de la catedra Diseño de Aplicaciones Web de FIUBA🤓.
 
 
 ---
