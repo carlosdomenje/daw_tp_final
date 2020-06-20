@@ -43,8 +43,8 @@ class ViewMainPage {
                                                                         </div></a> \
                             </li>";
                     break;
-                // Agrego el case para que reconozca como type = 3 a los veladores    
-                case 3: // Veladores                  
+                // Agrego el case para que reconozca como type = 2 a los veladores    
+                case 2: // Veladores                  
                     items += "<li class='collection-item avatar'> \
                             <img src='images/velador_c.png' alt='' class='circle blue'> \
                             <span class='title'>" + list[i].name + "</span> \
@@ -73,31 +73,40 @@ class Main {
     handleEvent(evt) {
         let obj = this.myf.getElementByEvent(evt);
         console.log("click en objeto:" + obj.id);
-        //let sw: HTMLElement = this.myf.getElementByEvent(evt);
-        //console.log("click en device:"+sw.id);
+        // Busca el objeto btn el cual simboliza a un boton presionado
         if (obj.id.startsWith("btn")) {
             console.log("click en boton:" + obj.id);
             switch (obj.id) {
                 case "btn-all":
                     this.buttonColorContol(obj.id);
+                    this.myf.requestGET("/devices?filter=0", this);
                     break;
                 case "btn-light":
                     this.buttonColorContol(obj.id);
+                    this.myf.requestGET("/devices?filter=1", this);
                     break;
                 case "btn-window":
                     this.buttonColorContol(obj.id);
+                    this.myf.requestGET("/devices?filter=2", this);
                     break;
                 case "btn-lamp":
                     this.buttonColorContol(obj.id);
+                    this.myf.requestGET("/devices?filter=3", this);
                     break;
             }
         }
+        // Si el objeto presionado, tiene cabeceta "dev", se presiono un switch
         if (obj.id.startsWith("dev")) {
             console.log("click en sw:" + obj.id);
             let data = { "id": obj.id, "state": this.view.getSwitchStateById(obj.id) };
             this.myf.requestPOST("devices", data, this);
         }
     }
+    /* *******************************************************************
+     * Funcion para controlar el color del boton presionado
+     * - Cuando se presiona un boton este se pone en azul
+     * - Los demas se ponen de color gris simulando que no estan activos.
+     * *******************************************************************/
     buttonColorContol(button) {
         let btn_all = this.myf.getElementById("btn-all");
         let btn_light = this.myf.getElementById("btn-light");
@@ -140,18 +149,6 @@ class Main {
                 let sw = this.myf.getElementById("dev_" + data[i].id);
                 sw.addEventListener("click", this);
             }
-            let btn_all = this.myf.getElementById("btn-all");
-            btn_all.addEventListener("click", this);
-            let btn_light = this.myf.getElementById("btn-light");
-            btn_light.addEventListener("click", this);
-            let btn_window = this.myf.getElementById("btn-window");
-            btn_window.addEventListener("click", this);
-            let btn_lamp = this.myf.getElementById("btn-lamp");
-            btn_lamp.addEventListener("click", this);
-            btn_all.style.backgroundColor = "blue";
-            btn_light.style.backgroundColor = "grey";
-            btn_window.style.backgroundColor = "grey";
-            btn_lamp.style.backgroundColor = "grey";
         }
     }
     handlePOSTResponse(status, response) {
@@ -159,10 +156,30 @@ class Main {
             console.log(response);
         }
     }
+    // Carga los botones a sus variables y agrega evento click de cada uno
+    // Se definen colores de cada uno
+    loadButtons() {
+        let btn_all = this.myf.getElementById("btn-all");
+        btn_all.addEventListener("click", this);
+        let btn_light = this.myf.getElementById("btn-light");
+        btn_light.addEventListener("click", this);
+        let btn_window = this.myf.getElementById("btn-window");
+        btn_window.addEventListener("click", this);
+        let btn_lamp = this.myf.getElementById("btn-lamp");
+        btn_lamp.addEventListener("click", this);
+        btn_all.style.backgroundColor = "blue";
+        btn_light.style.backgroundColor = "grey";
+        btn_window.style.backgroundColor = "grey";
+        btn_lamp.style.backgroundColor = "grey";
+    }
     main() {
         this.myf = new MyFramework();
         this.view = new ViewMainPage(this.myf);
-        this.myf.requestGET("devices", this);
+        // Se realiza la consulta de los dispositivos con filtro 0
+        // Se mostraran todos los dispositivos
+        this.myf.requestGET("/devices?filter=0", this);
+        // Se cargan los eventos listeners de los botones.
+        this.loadButtons();
     }
 }
 window.onload = () => {

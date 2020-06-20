@@ -6,16 +6,9 @@ app.use(express.json()); // para parsear application/json
 app.use(express.static('.')); // para servir archivos estaticos
 
 
-//EJ 12
-app.get('/devices', function(req, res, next) {
-    mysql.query('SELECT * FROM Devices', function(err, rta, field) {
-        if (err) {
-            res.send(err).status(400);
-            return;
-        }
-        res.send(rta).status(200);
-    });
-});
+/* ******************************************************************* 
+ * Obtener dispositivos por ID
+ * *******************************************************************/
 app.get('/devices/:id', function(req, res, next) {
     mysql.query('SELECT * FROM Devices WHERE id=?', [req.params.id], function(err, rta, field) {
         if (err) {
@@ -25,6 +18,43 @@ app.get('/devices/:id', function(req, res, next) {
         res.send(rta);
     });
 });
+
+/* ******************************************************************* 
+ * Obtener dispositivos por filtro
+ *
+ * filter = 0 -> Obtiene todos los dispositivos
+ * filter = 1 -> Obtiene las lamparas
+ * filter = 2 -> Obtiene las persianas
+ * filter = 3 -> Obtiene los veladores
+ * *******************************************************************/
+app.get('/devices', function(req, res, next) {
+
+    var filter = req.query.filter || 0;
+    filter = Number(filter);
+
+    if (filter == 1 || filter == 2 || filter == 3) {
+        mysql.query('SELECT * FROM Devices WHERE type=?', [filter - 1], function(err, rta, field) {
+            if (err) {
+                res.send(err).status(400);
+                return;
+            }
+
+            res.send(rta);
+        });
+    } else {
+        mysql.query('SELECT * FROM Devices', function(err, rta, field) {
+            if (err) {
+                res.send(err).status(400);
+                return;
+            }
+            res.send(rta).status(200);
+        });
+    }
+});
+
+/* ******************************************************************* 
+ * Actualiza el estado del dispositivo
+ * *******************************************************************/
 app.post('/devices', function(req, res, next) {
 
     console.log(req.body);
