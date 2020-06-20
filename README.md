@@ -57,6 +57,12 @@ Abrir una terminal y ejecutar:
 docker-compose up
 ```
 
+Abrir su navegador WEB y en la url ingresar
+```
+http://localhost:8000/
+
+```
+
 Para finalizar la aplicacion:
 
 ```
@@ -64,6 +70,9 @@ docker-compose down
 
 ```
 
+## Captura de la aplicacion 📳️
+
+![Aplicacion](/app.png)
 
 ## Herramientas utilizadas 🛠️
 
